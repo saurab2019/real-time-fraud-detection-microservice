@@ -1,19 +1,31 @@
 package com.saurabh.frauddetection.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.saurabh.frauddetection.dto.Decision;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "fraud_results")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FraudResult {
     @Id
     @Column(name = "transaction_id")
     private String transactionId;
     private Integer fraudScore;
-    private String decision;
+
+    @Enumerated(EnumType.STRING)
+    private Decision decision;
+
     private LocalDateTime processedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.processedAt = LocalDateTime.now();
+    }
 }

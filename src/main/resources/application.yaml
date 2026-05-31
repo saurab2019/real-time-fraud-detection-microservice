@@ -12,3 +12,13 @@ spring:
       ddl-auto: validate
 
     show-sql: true
+
+fraud:
+  rules:
+    amount-threshold:
+      threshold: 50000
+      score: 40
+
+  decision:
+    approve-max-score: 30
+    otp-max-score: 70

@@ -1,4 +1,4 @@
-package com.saurabh.frauddetection.Interfaces;
+package com.saurabh.frauddetection.service;
 
 import com.saurabh.frauddetection.dto.TransactionRequest;
 import com.saurabh.frauddetection.dto.TransactionResponse;

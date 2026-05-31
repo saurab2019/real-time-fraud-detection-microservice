@@ -1,43 +1,66 @@
 package com.saurabh.frauddetection.service;
 
-import com.saurabh.frauddetection.Interfaces.ITransactionService;
+import com.saurabh.frauddetection.dto.Decision;
+import com.saurabh.frauddetection.dto.FraudEvaluationResult;
 import com.saurabh.frauddetection.dto.TransactionRequest;
 import com.saurabh.frauddetection.dto.TransactionResponse;
+import com.saurabh.frauddetection.engine.FraudDetectionEngine;
+import com.saurabh.frauddetection.entity.FraudResult;
 import com.saurabh.frauddetection.entity.Transaction;
-import com.saurabh.frauddetection.repository.TransactionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.saurabh.frauddetection.repository.ITransactionRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 @Service
 public class TransactionService implements ITransactionService {
-    private TransactionRepository transactionRepository;
+    private final ITransactionRepository transactionRepository;
+    private final IDecisionService decisionService;
+    private final IFraudResultService fraudResultService;
+    private final IAuditLogService auditLogService;
+    private final FraudDetectionEngine fraudDetectionEngine;
 
-    @Autowired
-    public TransactionService(TransactionRepository transactionRepository)
+    public TransactionService(ITransactionRepository transactionRepository,
+                              IDecisionService decisionService,
+                              IFraudResultService fraudResultService,
+                              IAuditLogService auditLogService,
+                              FraudDetectionEngine fraudDetectionEngine)
     {
         this.transactionRepository = transactionRepository;
+        this.decisionService = decisionService;
+        this.auditLogService = auditLogService;
+        this.fraudResultService = fraudResultService;
+        this.fraudDetectionEngine = fraudDetectionEngine;
     }
 
-    public TransactionResponse  saveTransaction(TransactionRequest request)
+    private Transaction createTransaction(TransactionRequest request)
     {
         String transactionId = "TXN-" + UUID.randomUUID().toString().substring(0, 8);
 
-        Transaction transaction = Transaction.builder()
-                .transactionId(transactionId)
-                .amount(request.getAmount())
-                .country(request.getCountry())
-                .userId(request.getUserId())
-                .merchantId(request.getMerchantId())
-                .build();
+        return Transaction.builder()
+                        .transactionId(transactionId)
+                        .amount(request.getAmount())
+                        .country(request.getCountry())
+                        .userId(request.getUserId())
+                        .merchantId(request.getMerchantId())
+                        .build();
 
-        Transaction saved = transactionRepository.save(transaction);
+    }
+    public TransactionResponse  saveTransaction(TransactionRequest request)
+    {
+        Transaction transaction = transactionRepository.save(createTransaction(request));
+
+        FraudEvaluationResult fraudEvaluationResult = fraudDetectionEngine.evaluate(transaction);
+        Decision decision = decisionService.determineDecision(fraudEvaluationResult.getTotalScore());
+
+        FraudResult fraudResult = fraudResultService.saveResult(transaction.getTransactionId(),fraudEvaluationResult.getTotalScore(), decision);
+
+        auditLogService.saveLog(transaction.getTransactionId(), fraudEvaluationResult.getRuleResults());
 
         return TransactionResponse.builder()
-                .transactionId(saved.getTransactionId())
-                .status("SUCCESS")
+                .transactionId(fraudResult.getTransactionId())
+                .score(fraudResult.getFraudScore())
+                .decision(fraudResult.getDecision())
                 .build();
     }
 }

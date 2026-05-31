@@ -1,6 +1,6 @@
 package com.saurabh.frauddetection.controller;
 
-import com.saurabh.frauddetection.Interfaces.ITransactionService;
+import com.saurabh.frauddetection.service.ITransactionService;
 import com.saurabh.frauddetection.dto.TransactionRequest;
 import com.saurabh.frauddetection.dto.TransactionResponse;
 import jakarta.validation.Valid;
@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TransactionController {
 
-    private ITransactionService transactionService;
+    private final ITransactionService transactionService;
 
-    @Autowired
     public TransactionController(ITransactionService transactionService)
     {
         this.transactionService = transactionService;

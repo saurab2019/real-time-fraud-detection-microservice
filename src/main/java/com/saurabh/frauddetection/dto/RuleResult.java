@@ -7,8 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TransactionResponse {
-    private String transactionId;
+public class RuleResult {
+    private boolean triggered;
     private int score;
-    private Decision decision;
+    private String reason;
+    private String ruleName;
 }
