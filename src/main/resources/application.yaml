@@ -13,11 +13,21 @@ spring:
 
     show-sql: true
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 fraud:
   rules:
     amount-threshold:
       threshold: 50000
       score: 40
+
+    velocity:
+      max-transactions: 5
+      window-seconds: 60
+      score: 30
 
   decision:
     approve-max-score: 30
