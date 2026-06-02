@@ -4,20 +4,17 @@ import com.saurabh.frauddetection.dto.FraudEvaluationResult;
 import com.saurabh.frauddetection.dto.RuleResult;
 import com.saurabh.frauddetection.entity.Transaction;
 import com.saurabh.frauddetection.rules.IFraudRule;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class FraudDetectionEngine {
 
     private final List<IFraudRule> fraudRuleList;
-
-    public FraudDetectionEngine(List<IFraudRule> fraudRuleList)
-    {
-        this.fraudRuleList = fraudRuleList;
-    }
 
     public FraudEvaluationResult evaluate(Transaction transaction)
     {

@@ -4,20 +4,15 @@ import com.saurabh.frauddetection.config.properties.VelocityRuleProperties;
 import com.saurabh.frauddetection.dto.RuleResult;
 import com.saurabh.frauddetection.entity.Transaction;
 import com.saurabh.frauddetection.redis.IVelocityTrackerService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
 public class VelocityRule implements IFraudRule{
 
     private final IVelocityTrackerService velocityTrackerService;
     private final VelocityRuleProperties velocityRuleProperties;
-
-    public VelocityRule(IVelocityTrackerService velocityTrackerService,
-                        VelocityRuleProperties velocityRuleProperties)
-    {
-        this.velocityTrackerService = velocityTrackerService;
-        this.velocityRuleProperties = velocityRuleProperties;
-    }
 
     @Override
     public RuleResult evaluate(Transaction transaction) {

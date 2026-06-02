@@ -29,6 +29,9 @@ fraud:
       window-seconds: 60
       score: 30
 
+    geo-anomaly:
+      score: 50
+
   decision:
     approve-max-score: 30
     otp-max-score: 70

@@ -1,6 +1,7 @@
 package com.saurabh.frauddetection.redis;
 
 import com.saurabh.frauddetection.config.properties.VelocityRuleProperties;
+import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
@@ -9,17 +10,11 @@ import java.time.Duration;
 import java.time.Instant;
 
 @Service
+@AllArgsConstructor
 public class VelocityTrackerService implements IVelocityTrackerService{
 
     private final StringRedisTemplate stringRedisTemplate;
     private final VelocityRuleProperties velocityRuleProperties;
-
-    public VelocityTrackerService(StringRedisTemplate stringRedisTemplate,
-                                  VelocityRuleProperties velocityRuleProperties)
-    {
-        this.stringRedisTemplate = stringRedisTemplate;
-        this.velocityRuleProperties = velocityRuleProperties;
-    }
 
     @Override
     public int recordAndGetTransactionCount(Long userId, String transactionId) {
