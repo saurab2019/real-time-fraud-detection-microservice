@@ -7,31 +7,21 @@ import com.saurabh.frauddetection.dto.TransactionResponse;
 import com.saurabh.frauddetection.engine.FraudDetectionEngine;
 import com.saurabh.frauddetection.entity.FraudResult;
 import com.saurabh.frauddetection.entity.Transaction;
+import com.saurabh.frauddetection.exception.TransactionNotFoundException;
 import com.saurabh.frauddetection.repository.ITransactionRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class TransactionService implements ITransactionService {
     private final ITransactionRepository transactionRepository;
     private final IDecisionService decisionService;
     private final IFraudResultService fraudResultService;
     private final IAuditLogService auditLogService;
     private final FraudDetectionEngine fraudDetectionEngine;
-
-    public TransactionService(ITransactionRepository transactionRepository,
-                              IDecisionService decisionService,
-                              IFraudResultService fraudResultService,
-                              IAuditLogService auditLogService,
-                              FraudDetectionEngine fraudDetectionEngine)
-    {
-        this.transactionRepository = transactionRepository;
-        this.decisionService = decisionService;
-        this.auditLogService = auditLogService;
-        this.fraudResultService = fraudResultService;
-        this.fraudDetectionEngine = fraudDetectionEngine;
-    }
 
     private Transaction createTransaction(TransactionRequest request)
     {
@@ -62,5 +52,11 @@ public class TransactionService implements ITransactionService {
                 .score(fraudResult.getFraudScore())
                 .decision(fraudResult.getDecision())
                 .build();
+    }
+
+    public Transaction getTransaction(String transactionId)
+    {
+        return transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new TransactionNotFoundException(transactionId));
     }
 }
