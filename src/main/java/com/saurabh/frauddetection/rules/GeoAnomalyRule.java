@@ -5,10 +5,11 @@ import com.saurabh.frauddetection.dto.RuleResult;
 import com.saurabh.frauddetection.entity.Transaction;
 import com.saurabh.frauddetection.redis.GeoLocationService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GeoAnomalyRule implements IFraudRule{
 
     private final GeoLocationService geoLocationService;

@@ -3,10 +3,11 @@ package com.saurabh.frauddetection.service;
 import com.saurabh.frauddetection.config.properties.DecisionScoreProperties;
 import com.saurabh.frauddetection.dto.Decision;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DecisionService implements IDecisionService{
 
     private final DecisionScoreProperties properties;

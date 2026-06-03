@@ -6,13 +6,14 @@ import com.saurabh.frauddetection.dto.TransactionRequest;
 import com.saurabh.frauddetection.dto.TransactionResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TransactionController {
 
     private final ITransactionService transactionService;

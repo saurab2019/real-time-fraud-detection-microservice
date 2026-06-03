@@ -4,13 +4,14 @@ import com.saurabh.frauddetection.config.properties.AmountThresholdProperties;
 import com.saurabh.frauddetection.dto.RuleResult;
 import com.saurabh.frauddetection.entity.Transaction;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AmountThresholdRule implements IFraudRule{
 
     private final AmountThresholdProperties properties;

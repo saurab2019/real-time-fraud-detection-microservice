@@ -5,6 +5,7 @@ import com.saurabh.frauddetection.entity.AuditLog;
 import com.saurabh.frauddetection.entity.FraudResult;
 import com.saurabh.frauddetection.repository.IAuditLogRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.digester.Rule;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuditLogService implements IAuditLogService{
 
     private final IAuditLogRepository auditLogRepository;

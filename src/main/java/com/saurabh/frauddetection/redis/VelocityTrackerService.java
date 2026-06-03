@@ -2,6 +2,7 @@ package com.saurabh.frauddetection.redis;
 
 import com.saurabh.frauddetection.config.properties.VelocityRuleProperties;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VelocityTrackerService implements IVelocityTrackerService{
 
     private final StringRedisTemplate stringRedisTemplate;

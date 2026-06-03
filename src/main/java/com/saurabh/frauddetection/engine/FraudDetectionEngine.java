@@ -5,13 +5,14 @@ import com.saurabh.frauddetection.dto.RuleResult;
 import com.saurabh.frauddetection.entity.Transaction;
 import com.saurabh.frauddetection.rules.IFraudRule;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FraudDetectionEngine {
 
     private final List<IFraudRule> fraudRuleList;

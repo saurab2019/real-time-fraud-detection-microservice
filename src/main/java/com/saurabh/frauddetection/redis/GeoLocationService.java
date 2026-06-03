@@ -1,17 +1,19 @@
 package com.saurabh.frauddetection.redis;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GeoLocationService implements IGeoLocationService{
 
     private final StringRedisTemplate stringRedisTemplate;
     private final String KEY_PREFIX = "geo:user:";
+
     @Override
     public String getLastCountry(Long userId) {
         return stringRedisTemplate.opsForValue()

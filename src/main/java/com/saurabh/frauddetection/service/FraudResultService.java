@@ -4,11 +4,12 @@ import com.saurabh.frauddetection.dto.Decision;
 import com.saurabh.frauddetection.entity.FraudResult;
 import com.saurabh.frauddetection.repository.IFraudResultRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FraudResultService implements IFraudResultService {
     private final IFraudResultRepository fraudResultRepository;
 

@@ -5,10 +5,11 @@ import com.saurabh.frauddetection.dto.RuleResult;
 import com.saurabh.frauddetection.entity.Transaction;
 import com.saurabh.frauddetection.redis.IVelocityTrackerService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VelocityRule implements IFraudRule{
 
     private final IVelocityTrackerService velocityTrackerService;
