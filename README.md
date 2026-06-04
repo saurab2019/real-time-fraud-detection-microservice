@@ -233,7 +233,6 @@ Starts: **PostgreSQL**, **Redis**, and **Kafka**
 - Rule Configuration from Database
 - Grafana & Prometheus Metrics
 - Distributed Tracing
-- Kafka Consumers
 - Fraud Rule Versioning
 - Machine Learning Based Fraud Scoring
 - Kubernetes Deployment
@@ -244,6 +243,7 @@ Starts: **PostgreSQL**, **Redis**, and **Kafka**
 - Event-Driven Architecture
 - Redis Sliding Window Algorithms
 - Kafka Producers
+- Kafka Consumers
 - Strategy Design Pattern
 - Spring Boot Best Practices
 - Database Migrations with Flyway
