@@ -2,15 +2,12 @@
 
 A production-inspired backend microservice built using **Java** and **Spring Boot** that evaluates financial transactions in real time and determines whether they should be approved, require additional verification, or be blocked based on configurable fraud detection rules.
 
----
 
 ## Overview
 
 Financial institutions process millions of transactions every day. This project simulates a real-time fraud detection engine that evaluates incoming transactions against multiple fraud rules, calculates a risk score, and generates a fraud decision.
 
 The system is designed using modern backend engineering practices including event-driven architecture, Redis-based rate limiting, Kafka event publishing, Flyway database migrations, and a pluggable rule engine.
-
----
 
 ## Features
 
@@ -31,7 +28,6 @@ Detects suspicious country changes.
 - Previous Country: India → Current Country: Brazil
 - Adds configurable risk score when anomaly is detected
 
----
 
 ## Risk Scoring & Decision Engine
 
@@ -45,7 +41,6 @@ Fraud rules contribute to an aggregated fraud score.
 
 The decision engine is fully configurable through application properties.
 
----
 
 ## REST APIs
 
@@ -76,7 +71,6 @@ POST /transactions
 }
 ```
 
----
 
 ### Get Transaction Result
 
@@ -84,7 +78,6 @@ POST /transactions
 GET /transactions/{transactionId}
 ```
 
----
 
 ## Architecture
 
@@ -108,8 +101,6 @@ GET /transactions/{transactionId}
                     Kafka
 ```
 
----
-
 ## Technology Stack
 
 | Technology         | Purpose                          |
@@ -126,7 +117,6 @@ GET /transactions/{transactionId}
 | Lombok             | Boilerplate Reduction            |
 | OpenAPI / Swagger  | API Documentation                |
 
----
 
 ## Database Design
 
@@ -163,7 +153,6 @@ Stores fired fraud rules.
 | `reason`         |
 | `created_at`     |
 
----
 
 ## Event-Driven Architecture
 
@@ -192,7 +181,6 @@ fraud-decisions
 - Notification Service
 - Reporting Service
 
----
 
 ## Rule Engine Design
 
@@ -208,8 +196,6 @@ IFraudRule
 
 New rules can be added without modifying the fraud engine, making the system extensible and compliant with the **Open/Closed Principle**.
 
----
-
 ## Exception Handling
 
 Global exception handling is implemented using `@RestControllerAdvice`.
@@ -218,8 +204,6 @@ Global exception handling is implemented using `@RestControllerAdvice`.
 - Business exception handling
 - Consistent API error responses
 - Structured logging
-
----
 
 ## Running Locally
 
@@ -242,8 +226,6 @@ Starts: **PostgreSQL**, **Redis**, and **Kafka**
 ./mvnw spring-boot:run
 ```
 
----
-
 ## Future Improvements
 
 - Transactional Outbox Pattern
@@ -255,8 +237,6 @@ Starts: **PostgreSQL**, **Redis**, and **Kafka**
 - Fraud Rule Versioning
 - Machine Learning Based Fraud Scoring
 - Kubernetes Deployment
-
----
 
 ## Key Backend Concepts Demonstrated
 
@@ -272,7 +252,6 @@ Starts: **PostgreSQL**, **Redis**, and **Kafka**
 - Dockerized Local Development
 - Extensible Rule Engine
 
----
 
 ## Learning Outcomes
 
