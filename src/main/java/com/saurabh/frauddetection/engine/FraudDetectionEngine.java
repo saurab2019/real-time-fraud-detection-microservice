@@ -3,6 +3,7 @@ package com.saurabh.frauddetection.engine;
 import com.saurabh.frauddetection.dto.FraudEvaluationResult;
 import com.saurabh.frauddetection.dto.RuleResult;
 import com.saurabh.frauddetection.entity.Transaction;
+import com.saurabh.frauddetection.logging.IRequestLogger;
 import com.saurabh.frauddetection.rules.IFraudRule;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 public class FraudDetectionEngine {
 
     private final List<IFraudRule> fraudRuleList;
+    private final IRequestLogger requestLogger;
 
     public FraudEvaluationResult evaluate(Transaction transaction)
     {

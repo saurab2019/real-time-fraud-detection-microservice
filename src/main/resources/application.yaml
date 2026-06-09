@@ -52,8 +52,3 @@ fraud:
   decision:
     approve-max-score: 30
     otp-max-score: 70
-
-logging:
-  level:
-    root: INFO
-    com.saurabh.frauddetection: DEBUG

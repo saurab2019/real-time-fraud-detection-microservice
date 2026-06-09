@@ -11,9 +11,11 @@ import com.saurabh.frauddetection.exception.TransactionNotFoundException;
 import com.saurabh.frauddetection.kafka.FraudDecisionEvent;
 import com.saurabh.frauddetection.kafka.FraudEventPublisherService;
 import com.saurabh.frauddetection.kafka.IFraudEventPublisherService;
+import com.saurabh.frauddetection.logging.IRequestLogger;
 import com.saurabh.frauddetection.repository.ITransactionRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class TransactionService implements ITransactionService {
     private final IAuditLogService auditLogService;
     private final FraudDetectionEngine fraudDetectionEngine;
     private final IFraudEventPublisherService fraudEventPublisherService;
+    private final IRequestLogger requestLogger;
 
     private Transaction createTransaction(TransactionRequest request)
     {
@@ -45,12 +48,16 @@ public class TransactionService implements ITransactionService {
     public TransactionResponse  saveTransaction(TransactionRequest request)
     {
         Transaction transaction = transactionRepository.save(createTransaction(request));
+        requestLogger.info(transaction.getTransactionId(), "Recieved");
 
         FraudEvaluationResult fraudEvaluationResult = fraudDetectionEngine.evaluate(transaction);
         Decision decision = decisionService.determineDecision(fraudEvaluationResult.getTotalScore());
+        requestLogger.info(transaction.getTransactionId(),
+                String.format("Total score: %d, decision: %s",
+                fraudEvaluationResult.getTotalScore(),
+                decision.toString()));
 
         FraudResult fraudResult = fraudResultService.saveResult(transaction.getTransactionId(),fraudEvaluationResult.getTotalScore(), decision);
-
         auditLogService.saveLog(transaction.getTransactionId(), fraudEvaluationResult.getRuleResults());
 
         fraudEventPublisherService.publish(new FraudDecisionEvent(
