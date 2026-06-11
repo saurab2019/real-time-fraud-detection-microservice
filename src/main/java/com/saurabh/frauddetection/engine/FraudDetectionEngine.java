@@ -17,7 +17,6 @@ import java.util.List;
 public class FraudDetectionEngine {
 
     private final List<IFraudRule> fraudRuleList;
-    private final IRequestLogger requestLogger;
 
     public FraudEvaluationResult evaluate(Transaction transaction)
     {
@@ -27,11 +26,11 @@ public class FraudDetectionEngine {
         for(IFraudRule fraudRule : fraudRuleList)
         {
             RuleResult result = fraudRule.evaluate(transaction);
-            ruleResultList.add(result);
-            totalScore += result.getScore();
+            if(result.isTriggered()) {
+                ruleResultList.add(result);
+                totalScore += result.getScore();
+            }
         }
         return new FraudEvaluationResult(totalScore, ruleResultList);
     }
-
-
 }
