@@ -8,6 +8,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Getter
+@Setter
 public class TransactionRequest {
     @NotNull(message = "userId is required")
     private Long userId;

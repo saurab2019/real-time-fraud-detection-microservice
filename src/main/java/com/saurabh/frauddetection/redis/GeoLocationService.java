@@ -12,7 +12,7 @@ import java.time.Duration;
 public class GeoLocationService implements IGeoLocationService{
 
     private final StringRedisTemplate stringRedisTemplate;
-    private final String KEY_PREFIX = "geo:user:";
+    private static final String KEY_PREFIX = "geo:user:";
 
     @Override
     public String getLastCountry(Long userId) {
