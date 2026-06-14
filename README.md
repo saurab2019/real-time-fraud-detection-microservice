@@ -2,12 +2,73 @@
 
 A production-inspired backend microservice built using **Java** and **Spring Boot** that evaluates financial transactions in real time and determines whether they should be approved, require additional verification, or be blocked based on configurable fraud detection rules.
 
+## Highlights
+
+- Pluggable Fraud Rule Engine (Strategy Pattern)
+- Redis Sliding Window Velocity Detection
+- Kafka Event Publishing & Consumption
+- PostgreSQL Persistence Layer
+- Flyway Database Migrations
+- Global Exception Handling
+- OpenAPI / Swagger Documentation
+- Spring Boot Actuator Monitoring
+- Comprehensive Unit & Controller Testing
+- Docker Compose Local Infrastructure
 
 ## Overview
 
 Financial institutions process millions of transactions every day. This project simulates a real-time fraud detection engine that evaluates incoming transactions against multiple fraud rules, calculates a risk score, and generates a fraud decision.
 
 The system is designed using modern backend engineering practices including event-driven architecture, Redis-based rate limiting, Kafka event publishing, Flyway database migrations, and a pluggable rule engine.
+
+## Technology Stack
+
+| Technology         | Purpose                          |
+|--------------------|----------------------------------|
+| Java 21            | Programming Language             |
+| Spring Boot 3      | Backend Framework                |
+| PostgreSQL         | Transaction Persistence          |
+| Redis              | Sliding Window Velocity Tracking |
+| Apache Kafka       | Event Publishing                 |
+| Spring Data JPA    | Data Access Layer                |
+| Flyway             | Database Versioning              |
+| Docker Compose     | Local Infrastructure             |
+| Maven              | Build Tool                       |
+| Lombok             | Boilerplate Reduction            |
+| OpenAPI / Swagger  | API Documentation                |
+
+## Architecture flow
+```
+Client
+│
+▼
+TransactionController
+│
+▼
+TransactionService
+│
+▼
+FraudDetectionEngine
+│
+├── AmountThresholdRule
+├── VelocityRule (Redis)
+└── GeoAnomalyRule (Redis)
+│
+▼
+DecisionService
+│
+▼
+PostgreSQL
+│
+▼
+Kafka Producer
+│
+▼
+fraud-decisions Topic
+│
+▼
+Kafka Consumer
+```
 
 ## Features
 
@@ -71,53 +132,19 @@ POST /transactions
 }
 ```
 
-
 ### Get Transaction Result
 
 ```http
 GET /transactions/{transactionId}
 ```
 
+## API Documentation
 
-## Architecture
+Interactive API documentation is available via Swagger UI.
 
+```text
+http://localhost:8080/swagger-ui/index.html
 ```
-                 Spring Boot
-                      │
-                      ▼
-            Fraud Detection Engine
-                      │
-        ┌─────────────┼─────────────┐
-        ▼             ▼             ▼
- PostgreSQL        Redis       Rule Engine
-                      │
-                      ▼
-                Risk Scoring
-                      │
-                      ▼
-                 Decision
-                      │
-                      ▼
-                    Kafka
-```
-
-## Technology Stack
-
-| Technology         | Purpose                          |
-|--------------------|----------------------------------|
-| Java 21            | Programming Language             |
-| Spring Boot 3      | Backend Framework                |
-| PostgreSQL         | Transaction Persistence          |
-| Redis              | Sliding Window Velocity Tracking |
-| Apache Kafka       | Event Publishing                 |
-| Spring Data JPA    | Data Access Layer                |
-| Flyway             | Database Versioning              |
-| Docker Compose     | Local Infrastructure             |
-| Maven              | Build Tool                       |
-| Lombok             | Boilerplate Reduction            |
-| OpenAPI / Swagger  | API Documentation                |
-
-
 ## Database Design
 
 ### `transactions`
@@ -175,27 +202,83 @@ fraud-decisions
 }
 ```
 
-**Potential Consumers:**
-- Audit Service
-- Analytics Service
-- Notification Service
-- Reporting Service
+Current Consumers:
 
+- FraudDecisionConsumer
 
-## Rule Engine Design
+The consumer subscribes to the fraud-decisions topic and processes fraud decision events asynchronously.
 
-The fraud detection engine follows the **Strategy Pattern**.
+This demonstrates event-driven communication between independent services.
 
+## Configuration Driven Rules
+
+Fraud rules are externally configurable through application.yml.
+
+Examples:
+
+```yaml
+fraud:
+  rules:
+    amount-threshold:
+      threshold: 50000
+      score: 40
+
+    velocity:
+      max-transactions: 5
+      window-seconds: 60
+      score: 30
+```   
+
+## Testing
+
+The project includes comprehensive automated tests covering:
+
+### Unit Tests
+
+- Fraud Rules
+    - AmountThresholdRuleTest
+    - VelocityRuleTest
+    - GeoAnomalyRuleTest
+
+- Services
+    - DecisionServiceTest
+    - FraudResultServiceTest
+    - AuditLogServiceTest
+    - TransactionServiceTest
+
+- Engine
+    - FraudDetectionEngineTest
+
+- Kafka Components
+    - FraudEventPublisherServiceTest
+    - FraudDecisionConsumerTest
+
+- Redis Components
+    - VelocityTrackerServiceTest
+    - GeoLocationServiceTest
+
+### Controller Tests
+
+- TransactionControllerTest
+
+Testing stack:
+
+- JUnit 5
+- Mockito
+- Spring MockMvc
+
+Run tests:
+
+```bash
+mvn test
 ```
-IFraudRule
-    │
-    ├── AmountThresholdRule
-    ├── VelocityRule
-    └── GeoAnomalyRule
-```
+Coverage includes:
 
-New rules can be added without modifying the fraud engine, making the system extensible and compliant with the **Open/Closed Principle**.
-
+- Business rules
+- Services
+- Controllers
+- Kafka components
+- Redis components
 ## Exception Handling
 
 Global exception handling is implemented using `@RestControllerAdvice`.
@@ -204,6 +287,43 @@ Global exception handling is implemented using `@RestControllerAdvice`.
 - Business exception handling
 - Consistent API error responses
 - Structured logging
+
+## Monitoring & Observability
+
+Spring Boot Actuator is enabled.
+
+Available endpoints:
+
+| Endpoint |
+|-----------|
+| /actuator/health |
+| /actuator/info |
+| /actuator/metrics |
+
+Examples:
+
+http://localhost:8080/actuator/health
+
+Actuator provides:
+
+- Application health status
+- JVM metrics
+- HTTP request metrics
+- Runtime diagnostics
+
+## Logging
+
+The service uses structured request-based logging.
+
+Logged events include:
+
+- Transaction received
+- Fraud evaluation results
+- Kafka publishing status
+- Kafka consumer processing
+- Exception handling
+
+Logs are written to dedicated application log files for easier troubleshooting and auditing.
 
 ## Running Locally
 
@@ -226,33 +346,11 @@ Starts: **PostgreSQL**, **Redis**, and **Kafka**
 ./mvnw spring-boot:run
 ```
 
-## Future Improvements
+## Future Enhancements
 
 - Transactional Outbox Pattern
 - Dead Letter Queue (DLQ)
-- Rule Configuration from Database
-- Grafana & Prometheus Metrics
-- Distributed Tracing
-- Fraud Rule Versioning
-- Machine Learning Based Fraud Scoring
-- Kubernetes Deployment
-
-## Key Backend Concepts Demonstrated
-
-- Microservice Design
-- Event-Driven Architecture
-- Redis Sliding Window Algorithms
-- Kafka Producers
-- Kafka Consumers
-- Strategy Design Pattern
-- Spring Boot Best Practices
-- Database Migrations with Flyway
-- REST API Design
-- Exception Handling
-- Dockerized Local Development
-- Extensible Rule Engine
-
-
-## Learning Outcomes
-
-This project was built to explore how real-world financial systems evaluate transactions, apply fraud detection rules, persist decisions, and publish events for downstream processing using a modern Java backend stack.
+- Rule configuration from database
+- Distributed tracing
+- Testcontainers Integration
+- ML-based risk scoring
