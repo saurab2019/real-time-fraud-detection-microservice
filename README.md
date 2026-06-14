@@ -353,4 +353,3 @@ Starts: **PostgreSQL**, **Redis**, and **Kafka**
 - Rule configuration from database
 - Distributed tracing
 - Testcontainers Integration
-- ML-based risk scoring
