@@ -7,8 +7,11 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class TransactionRequest {
     @NotNull(message = "userId is required")
     private Long userId;
